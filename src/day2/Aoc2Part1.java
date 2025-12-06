@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class AocDay2 {
+public class Aoc2Part1 {
 
     public long solve(String filename) {
         long count = 0;
@@ -31,7 +31,7 @@ public class AocDay2 {
         long result = 0;
         for (long i = startVal; i <= endVal; i++) {
             long digits = (long) (Math.log10(i) + 1);
-            if((digits % 2) != 0)
+            if((digits % 2) == 0)
                 continue;
 
             long divisor = (long) (Math.pow(10, digits / 2));
