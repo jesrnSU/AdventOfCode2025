@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Aoc1Part2 {
+public class SafePart2 {
 
     public static final int ROTATIONS = 100;
 

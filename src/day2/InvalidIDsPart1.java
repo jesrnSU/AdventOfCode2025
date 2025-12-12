@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Aoc2Part1 {
+public class InvalidIDsPart1 {
 
     public long solve(String filename) {
         long count = 0;

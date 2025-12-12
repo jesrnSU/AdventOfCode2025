@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Aoc1Part1 {
+public class SafePart1 {
     
     public int solve(String fileName) throws IOException {
         int zeroHitCount = 0;
