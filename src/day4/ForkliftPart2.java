@@ -6,6 +6,8 @@ import util.*;
 import java.io.IOException;
 import java.util.List;
 
+// Much better solution than what I did in part1, imo
+
 public class ForkliftPart2 {
     private final String DAY4INPUT = "src/day4/data.txt";
     private final String DAY4TESTINPUT = "src/day4/datatest.txt";
