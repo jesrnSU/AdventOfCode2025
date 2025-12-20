@@ -1,8 +1,8 @@
-import day5.CafeteriaPart2;
+import day6.TrashCompactor2;
 
 public class App {
    public static void main(String[] args) throws Exception {
-        CafeteriaPart2 cafe = new CafeteriaPart2();
-        System.out.println(cafe.solve());
+        TrashCompactor2 tc2 = new TrashCompactor2(); 
+        System.out.println(tc2.solve());
     }
 }

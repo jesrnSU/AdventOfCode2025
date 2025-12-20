@@ -9,7 +9,7 @@ import java.util.List;
 public final class FileUtil {
     
     private FileUtil() {}
-    
+
     public static List<String> readAllLines(String filename) throws IOException {
         List<String> lines = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
