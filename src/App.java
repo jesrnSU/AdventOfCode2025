@@ -1,8 +1,8 @@
-import day6.TrashCompactor2;
+import day7.Laboratories1;
 
 public class App {
    public static void main(String[] args) throws Exception {
-        TrashCompactor2 tc2 = new TrashCompactor2(); 
-        System.out.println(tc2.solve());
+       Laboratories1 lab1 = new Laboratories1(); 
+       System.out.println(lab1.solve());
     }
 }
