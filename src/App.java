@@ -1,8 +1,9 @@
 import day7.Laboratories1;
+import day7.Laboratories2;
 
 public class App {
-   public static void main(String[] args) throws Exception {
-       Laboratories1 lab1 = new Laboratories1(); 
-       System.out.println(lab1.solve());
+    public static void main(String[] args) throws Exception {
+        Laboratories2 lab2 = new Laboratories2();
+        System.out.println(lab2.solve());
     }
 }
