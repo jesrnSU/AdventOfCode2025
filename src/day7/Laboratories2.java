@@ -12,12 +12,12 @@ public class Laboratories2 {
   private final int X_LEFT;
   private final int X_RIGHT;
   private List<String> data;
-  private HashMap<Integer,Integer> beamIndex = new HashMap<>();  
-  private HashMap<Integer,Integer> splitIndexes = new HashMap<>();
+  private HashMap<Integer, Long> beamIndex = new HashMap<>();  
+  private HashMap<Integer, Long> splitIndexes = new HashMap<>();
 
   public Laboratories2() {
     try {
-      data = FileUtil.readAllLines("src/day7/miniData.txt");
+      data = FileUtil.readAllLines("src/day7/data.txt");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -25,49 +25,43 @@ public class Laboratories2 {
     X_RIGHT = data.get(0).length();
   }
 
-  public int solve() {
+  public long solve() {
+    long total = 0;
+    long start = 1;
     int startingIndex = data.get(0).indexOf('S');
-    beamIndex.put(startingIndex, 1);
-    splitIndexes.put(startingIndex, 1);
-    int count = 0;
+    beamIndex.put(startingIndex, start);
+    splitIndexes.put(startingIndex, start);
 
     for (String s : data) {
-      System.out.println(splitIndexes.values());
       for (Integer i : beamIndex.keySet()) {
         if (s.charAt(i) == '^') {
-          count += beamIndex.get(i);
           addSplitBeams(i);
         }
       }
-      beamIndex = new HashMap<>(splitIndexes); 
+      beamIndex = new HashMap<>(splitIndexes);
     }
-    return count;
+    
+    for(Long e : beamIndex.values()){
+      total += e;
+    }
+    return total;
   }
 
   private void addSplitBeams(Integer i){
     if((i - 1) >= X_LEFT){
-      if(splitIndexes.get(i - 1) == null){
-        splitIndexes.put(i - 1, beamIndex.get(i));
+      if(splitIndexes.get(i - 1) != null){
+        splitIndexes.put(i - 1, splitIndexes.get(i - 1) + splitIndexes.get(i));
       }else{
-        splitIndexes.put(i - 1, splitIndexes.get(i - 1) + 1);
+        splitIndexes.put(i - 1, splitIndexes.get(i));
       }
     }
     if((i + 1) <= X_RIGHT){
-      if(splitIndexes.get(i + 1) == null){
-        splitIndexes.put(i + 1, beamIndex.get(i));
+      if(splitIndexes.get(i + 1) != null){
+        splitIndexes.put(i + 1, splitIndexes.get(i + 1) + splitIndexes.get(i));
       }else{
-        splitIndexes.put(i + 1, splitIndexes.get(i + 1) + 1);
+        splitIndexes.put(i + 1, splitIndexes.get(i));
       }
     }
     splitIndexes.remove(i);
-  }
-
-  private int countTimelines(){
-    int sum = 0;
-    for(Integer i : beamIndex.values()){
-      sum += i;
-    }
-    System.out.println(splitIndexes.values());
-    return sum;
   }
 }

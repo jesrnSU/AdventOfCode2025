@@ -1,28 +1,18 @@
 package day7;
 
 public class Beam {
-    private int startingIndex;
-    private Beam leftChild;
-    private Beam rightChild;
+  private int splitCount; 
 
-    public Beam(int index){
-        this.startingIndex = index;
-    }
+  public Beam(int splitCount) {
+    this.splitCount = splitCount;
+  }
 
-    public void setChildren(int leftChildIndex, int rightChildIndex){
-        leftChild = new Beam(leftChildIndex);
-        rightChild = new Beam(rightChildIndex);
-    }
+    public int getSplitCount() {
+    return splitCount;
+  }
 
-    public int getStartingIndex() {
-        return startingIndex;
-    }
-
-    public Beam getLeftChild() {
-        return leftChild;
-    }
-
-    public Beam getRightChild() {
-        return rightChild;
-    }
+  @Override
+  public String toString() {
+    return " Split count: " + splitCount;
+  }
 }
