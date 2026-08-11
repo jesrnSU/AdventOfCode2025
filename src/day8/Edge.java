@@ -8,6 +8,7 @@ public class Edge {
   public Edge(Coord p1, Coord p2){
     this.point1 = p1;
     this.point2 = p2;
+    this.distance = calculateDistance();
   }
 
   private long calculateDistance(){
@@ -29,5 +30,14 @@ public class Edge {
 
   public Coord getPoint2() {
     return point2;
+  }
+
+  public long getDistance() {
+    return distance;
+  }
+
+  @Override
+  public String toString() {
+    return  point1.toString() + " - " + point2.toString() + " = " + distance;
   }
 }

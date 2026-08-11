@@ -1,7 +1,6 @@
 package day8;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Objects;
 
 public class Coord {
   private int x;
@@ -26,6 +25,19 @@ public class Coord {
     return z;
   }
 
+  @Override
+  public boolean equals(Object o){
+    if(this == o) return true;
+    if(o == null || getClass() != o.getClass()) return false;
+    Coord coord = (Coord) o;
+    return this.getX() == coord.getX() && this.getY() == coord.getY() && this.getZ() == coord.getZ();
+  }
+
+  @Override
+  public int hashCode(){
+    return Objects.hash(this.x, this.y, this.z);
+  }
+  
   @Override
   public String toString() {
     return "(" + this.x + "," + this.y + "," + this.z + ")";
