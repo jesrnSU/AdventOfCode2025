@@ -16,6 +16,11 @@ public class MovieTheater1 {
     }
   }
 
+  public long solve2(){
+    
+    return 0;
+  }
+
   public long solve(){
     Tile currentTile;
     long largestArea = 0;
