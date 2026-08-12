@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import day8.Coord;
+import day9.Tile;
 
 public final class FileUtil {
 
@@ -23,6 +24,19 @@ public final class FileUtil {
       }
     }
     return lines;
+  }
+
+  public static ArrayDeque<Tile> readTiles(String filename) throws IOException {
+    ArrayDeque<Tile> tiles = new ArrayDeque<>();
+    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+      String line;
+      String[] coords = new String[2];
+      while ((line = br.readLine()) != null) {
+        coords = line.split(","); 
+        tiles.add(new Tile(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+      }
+    }
+    return tiles;
   }
 
   public static ArrayDeque<Coord> readCoords(String filename) throws IOException {
