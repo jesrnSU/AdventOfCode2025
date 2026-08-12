@@ -54,10 +54,7 @@ public class Playground1 {
   }
 
   private void createCircuits() {
-    int count = 0;
     for (Map.Entry<Long, Edge> l : sortedDistances.entrySet()) {
-      if(count++ == 1000)
-        return;
       Coord c1 = l.getValue().getPoint1();
       Coord c2 = l.getValue().getPoint2();
 
@@ -82,11 +79,20 @@ public class Playground1 {
         if (set1 != set2) {
           set1.addAll(set2);
           circuits.remove(set2);
+
+          if(set1.size() == 1000){
+            System.out.println("Last : " + c1 + " and " + c2);
+            return;
+          }
         }
       } else {
         HashSet<Coord> targetSet = (set1 != null) ? set1 : set2;
         targetSet.add(c1);
         targetSet.add(c2);
+        if(targetSet.size() == 1000){
+          System.out.println("Last : " + c1 + " and " + c2);
+          return;
+        }
       }
     }
   }
