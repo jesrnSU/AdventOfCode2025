@@ -6,6 +6,6 @@ import day9.MovieTheater1;
 public class App {
   public static void main(String[] args) throws Exception {
     MovieTheater1 m1 = new MovieTheater1();
-    System.out.println(m1.solve());
+    System.out.println(m1.solve2());
   }
 }

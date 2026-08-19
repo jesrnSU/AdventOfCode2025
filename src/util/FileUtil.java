@@ -11,6 +11,8 @@ import day8.Coord;
 import day9.Tile;
 
 public final class FileUtil {
+  private static int tileGridLargestX;
+  private static int tileGridLargestY;
 
   private FileUtil() {
   }
@@ -28,15 +30,40 @@ public final class FileUtil {
 
   public static ArrayDeque<Tile> readTiles(String filename) throws IOException {
     ArrayDeque<Tile> tiles = new ArrayDeque<>();
+    int largestX = 0;
+    int currentX = 0;
+    int largestY = 0;
+    int currentY = 0;
+
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       String line;
       String[] coords = new String[2];
+
       while ((line = br.readLine()) != null) {
-        coords = line.split(","); 
-        tiles.add(new Tile(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+        coords = line.split(",");
+        currentX = Integer.parseInt(coords[0]);
+        currentY = Integer.parseInt(coords[1]);
+        
+        if(currentX > largestX){
+          largestX = currentX;
+        }
+        if(currentY > largestY){
+          largestY = currentY;
+        }
+        tiles.add(new Tile(currentX, currentY));
       }
+      tileGridLargestX = largestX;
+      tileGridLargestY = largestY;
     }
     return tiles;
+  }
+
+  public static int getTileGridLargestX() {
+    return tileGridLargestX;
+  }
+
+  public static int getTileGridLargestY() {
+    return tileGridLargestY;
   }
 
   public static ArrayDeque<Coord> readCoords(String filename) throws IOException {
