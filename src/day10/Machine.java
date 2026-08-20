@@ -2,13 +2,14 @@ package day10;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 
 public class Machine {
-  private char[] lights;
+  private boolean[] lights;
   private List<List<Integer>> buttons;
   private int[] joltage;
 
-  public Machine(char[] lights, List<List<Integer>> wiring, int[] joltage){
+  public Machine(boolean[] lights, List<List<Integer>> wiring, int[] joltage){
     this.lights = lights;
     this.buttons = wiring;
     this.joltage = joltage;
@@ -16,6 +17,14 @@ public class Machine {
 
   public List<List<Integer>> getButtons() {
     return buttons;
+  }
+
+  public int[] getJoltage() {
+    return joltage;
+  }
+
+  public boolean[] getLights() {
+    return lights;
   }
 
 
