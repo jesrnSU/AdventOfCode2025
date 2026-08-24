@@ -67,7 +67,7 @@ public class Factory {
   }
 
   public long solve() {
-    int minButtonPresses = 0;
+    long minButtonPresses = 0;
     for (Machine m : machines) {
       minButtonPresses += bfs(m.getLights(), m.getButtons());
     }
@@ -77,7 +77,45 @@ public class Factory {
     return minButtonPresses;
   }
 
+  public long solve2(){
+    long minButtonPresses = 0;
+    for(Machine m : machines){
+      minButtonPresses += bfs(m.getLights(), m.getButtons(), m.getJoltage());
+    }
+
+    return minButtonPresses;
+  }
+
   private long bfs(long goalLights, List<List<Integer>> wiring) {
+    Queue<State> states = new LinkedList<>();
+    Set<Long> visitedLights = new HashSet<>();
+    int buttonPresses = 0;
+
+    long startingState = 0L;
+    states.add(new State(startingState, buttonPresses));
+
+    while (!states.isEmpty()) {
+      State currentState = states.poll();
+
+      for (List<Integer> btnSequence : wiring) {
+        long currentLights = currentState.getLights();
+        // Toggle sequence on current state
+        for (Integer button : btnSequence) {
+          currentLights ^= (1L << button);
+        }
+
+        if (currentLights == goalLights) {
+          return currentState.getDepth() + 1;
+        }
+
+        if (visitedLights.add(currentLights)) {
+          states.add(new State(currentLights, currentState.getDepth() + 1));
+        }
+      }
+    }
+    return 0;
+  }
+  private long bfs(long goalLights, List<List<Integer>> wiring, int[] joltage) {
     Queue<State> states = new LinkedList<>();
     Set<Long> visitedLights = new HashSet<>();
     int buttonPresses = 0;
