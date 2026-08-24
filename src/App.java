@@ -7,6 +7,6 @@ import day9.MovieTheater1;
 public class App {
   public static void main(String[] args) throws Exception {
     Factory factory = new Factory();
-    factory.solve();
+    System.out.println(factory.solve());
   }
 }

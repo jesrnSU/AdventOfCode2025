@@ -2,14 +2,13 @@ package day10;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 
 public class Machine {
-  private boolean[] lights;
+  private long lights;
   private List<List<Integer>> buttons;
   private int[] joltage;
 
-  public Machine(boolean[] lights, List<List<Integer>> wiring, int[] joltage){
+  public Machine(long lights, List<List<Integer>> wiring, int[] joltage){
     this.lights = lights;
     this.buttons = wiring;
     this.joltage = joltage;
@@ -23,15 +22,12 @@ public class Machine {
     return joltage;
   }
 
-  public boolean[] getLights() {
+  public long getLights() {
     return lights;
   }
 
-
   @Override
   public String toString() {
-    return Arrays.toString(lights) + "\n" + buttons + "\n" + Arrays.toString(joltage) + "\n"; 
+    return lights + "\n" + buttons + "\n" + Arrays.toString(joltage) + "\n"; 
   }
-
-
 }
