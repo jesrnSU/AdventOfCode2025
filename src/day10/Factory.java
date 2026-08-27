@@ -3,7 +3,6 @@ package day10;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class Factory {
 
   public Factory() {
     try {
-      data = FileUtil.readAllLines("src/day10/data.txt");
+      data = FileUtil.readAllLines("src/day10/testData.txt");
     } catch (IOException e) {
       System.out.println(e.getMessage());
     }
@@ -79,9 +78,12 @@ public class Factory {
 
   public long solve2(){
     long minButtonPresses = 0;
-    for(Machine m : machines){
+    /*for(Machine m : machines){
       minButtonPresses += bfs(m.getLights(), m.getButtons(), m.getJoltage());
-    }
+    }*/
+
+    Machine m = machines.get(0);
+    bfs(m.getLights(), m.getButtons(), m.getJoltage());
 
     return minButtonPresses;
   }
@@ -115,31 +117,50 @@ public class Factory {
     }
     return 0;
   }
-  private long bfs(long goalLights, List<List<Integer>> wiring, int[] joltage) {
+
+  private long bfs(long goalLights, List<List<Integer>> wiring, int[] goalJoltage) {
     Queue<State> states = new LinkedList<>();
-    Set<Long> visitedLights = new HashSet<>();
     int buttonPresses = 0;
 
+    int maxTries = 0;
+
     long startingState = 0L;
-    states.add(new State(startingState, buttonPresses));
+    int[] startingJoltage = new int[goalJoltage.length];
+
+    System.out.println("Goal : " + goalLights + " : " + Arrays.toString(goalJoltage));
+
+    states.add(new State(startingState, buttonPresses, startingJoltage));
 
     while (!states.isEmpty()) {
+      maxTries++;
       State currentState = states.poll();
+      System.out.println("Starting state: " + currentState);
 
       for (List<Integer> btnSequence : wiring) {
         long currentLights = currentState.getLights();
+        int[] currentJoltage = currentState.getJoltage().clone(); 
+
         // Toggle sequence on current state
         for (Integer button : btnSequence) {
           currentLights ^= (1L << button);
+          currentJoltage[button]++;
+
+          if(currentJoltage[button] > goalJoltage[button]){
+            continue;
+          }
         }
 
-        if (currentLights == goalLights) {
+        System.out.println("\t" + currentLights + " : " + currentState.getDepth() + " : " + Arrays.toString(currentJoltage));
+
+        if (currentLights == goalLights && Arrays.equals(goalJoltage, currentJoltage)) {
           return currentState.getDepth() + 1;
         }
 
-        if (visitedLights.add(currentLights)) {
-          states.add(new State(currentLights, currentState.getDepth() + 1));
+        if(maxTries > 50){
+          return 0;
         }
+
+        states.add(new State(currentLights, currentState.getDepth() + 1, currentJoltage));
       }
     }
     return 0;
