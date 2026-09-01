@@ -16,6 +16,7 @@ import util.FileUtil;
 public class Factory {
   private List<String> data;
   private List<Machine> machines;
+  private int minButtonPresses;
 
   public Factory() {
     try {
@@ -77,15 +78,12 @@ public class Factory {
   }
 
   public long solve2(){
-    long minButtonPresses = 0;
-    /*for(Machine m : machines){
-      minButtonPresses += bfs(m.getLights(), m.getButtons(), m.getJoltage());
-    }*/
+    int result = 0;
+    for(Machine m : machines){
+      result += solveMachine(m.getButtons(), m.getJoltage()); 
+    }
 
-    Machine m = machines.get(0);
-    bfs(m.getLights(), m.getButtons(), m.getJoltage());
-
-    return minButtonPresses;
+    return result;
   }
 
   private long bfs(long goalLights, List<List<Integer>> wiring) {
@@ -102,9 +100,7 @@ public class Factory {
       for (List<Integer> btnSequence : wiring) {
         long currentLights = currentState.getLights();
         // Toggle sequence on current state
-        for (Integer button : btnSequence) {
-          currentLights ^= (1L << button);
-        }
+        currentLights = updateLights(currentLights, btnSequence);
 
         if (currentLights == goalLights) {
           return currentState.getDepth() + 1;
@@ -118,51 +114,105 @@ public class Factory {
     return 0;
   }
 
-  private long bfs(long goalLights, List<List<Integer>> wiring, int[] goalJoltage) {
-    Queue<State> states = new LinkedList<>();
-    int buttonPresses = 0;
+  public int solveMachine(List<List<Integer>> wiring, int[] goalJoltage) {
+        int numCounters = goalJoltage.length;
+        
+        Queue<JoltageState> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
 
-    int maxTries = 0;
+        int[] startJoltage = new int[numCounters];
+        queue.add(new JoltageState(startJoltage, 0));
+        visited.add(Arrays.toString(startJoltage));
 
-    long startingState = 0L;
-    int[] startingJoltage = new int[goalJoltage.length];
+        while (!queue.isEmpty()) {
+            JoltageState current = queue.poll();
 
-    System.out.println("Goal : " + goalLights + " : " + Arrays.toString(goalJoltage));
+            if (Arrays.equals(current.joltage, goalJoltage)) {
+                return current.presses;
+            }
 
-    states.add(new State(startingState, buttonPresses, startingJoltage));
+            for (List<Integer> wire : wiring) {
+                int[] nextJoltage = current.joltage.clone();
+                boolean validMove = true;
 
-    while (!states.isEmpty()) {
-      maxTries++;
-      State currentState = states.poll();
-      System.out.println("Starting state: " + currentState);
+                for (Integer btn : wire) {
+                    nextJoltage[btn]++;
+                    if (nextJoltage[btn] > goalJoltage[btn]) {
+                        validMove = false;
+                        break; 
+                    }
+                }
 
-      for (List<Integer> btnSequence : wiring) {
-        long currentLights = currentState.getLights();
-        int[] currentJoltage = currentState.getJoltage().clone(); 
+                if (!validMove) {
+                    continue; 
+                }
 
-        // Toggle sequence on current state
-        for (Integer button : btnSequence) {
-          currentLights ^= (1L << button);
-          currentJoltage[button]++;
-
-          if(currentJoltage[button] > goalJoltage[button]){
-            continue;
-          }
+                String stateStr = Arrays.toString(nextJoltage);
+                if (!visited.contains(stateStr)) {
+                    visited.add(stateStr);
+                    queue.add(new JoltageState(nextJoltage, current.presses + 1));
+                }
+            }
         }
 
-        System.out.println("\t" + currentLights + " : " + currentState.getDepth() + " : " + Arrays.toString(currentJoltage));
+        return -1; 
+    }
 
-        if (currentLights == goalLights && Arrays.equals(goalJoltage, currentJoltage)) {
-          return currentState.getDepth() + 1;
+    private static class JoltageState {
+        int[] joltage;
+        int presses;
+
+        JoltageState(int[] joltage, int presses) {
+            this.joltage = joltage;
+            this.presses = presses;
         }
+    }
 
-        if(maxTries > 50){
-          return 0;
-        }
+  private void dfs(List<List<Integer>> wiring, int[] goalJoltage, int[] currentJoltage, int currentPresses, int startIndex) {
+    if(currentPresses >= minButtonPresses){
+      return;
+    }
 
-        states.add(new State(currentLights, currentState.getDepth() + 1, currentJoltage));
+    if(Arrays.equals(goalJoltage, currentJoltage)){
+      minButtonPresses = currentPresses;
+      return;
+    }
+
+    int nextPresses = currentPresses + 1;
+
+    for(int i = startIndex; i < wiring.size(); i++){
+      List<Integer> wire = wiring.get(i);
+
+      if(isNextJoltageInvalid(currentJoltage, goalJoltage, wire)){
+        continue;
+      }
+
+      updateJoltage(currentJoltage, wire, 1);
+      dfs(wiring, goalJoltage, currentJoltage, nextPresses, startIndex);
+      updateJoltage(currentJoltage, wire, -1);
+    }
+  }
+
+  private boolean isNextJoltageInvalid(int[] currentJoltage, int[] goalJoltage, List<Integer> wire){
+    for(Integer btn : wire){
+      if((currentJoltage[btn] + 1) > goalJoltage[btn]){
+        return true;
       }
     }
-    return 0;
+    return false;
+  }
+
+  private int[] updateJoltage(int[] currentJoltage, List<Integer> wire, int mode){
+    for(Integer btn : wire){
+      currentJoltage[btn] += mode;
+    }
+    return currentJoltage;
+  }
+
+  private long updateLights(long currentLights, List<Integer> wire){
+    for(Integer btn : wire){
+      currentLights ^= (1L << btn);
+    }
+    return currentLights;
   }
 }
